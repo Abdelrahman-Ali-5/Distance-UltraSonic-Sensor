@@ -1,0 +1,20 @@
+/*
+ * UltraSonic_sensor.h
+ *
+ *  Created on: Oct 13, 2022
+ *      Author: kollaly
+ */
+
+#ifndef ULTRASONIC_SENSOR_H_
+#define ULTRASONIC_SENSOR_H_
+
+/*
+ * Initializaton of the ultrasonic_sensor
+ * */
+void UltraSonic_init(void);
+
+
+void Ultrasonic_edgeProcessing(void);
+
+
+#endif /* ULTRASONIC_SENSOR_H_ */

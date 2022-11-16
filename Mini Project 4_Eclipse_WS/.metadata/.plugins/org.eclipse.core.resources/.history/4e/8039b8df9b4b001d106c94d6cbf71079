@@ -1,0 +1,34 @@
+/*
+ * Mini_Project_4_Test.c
+ *
+ *  Created on: Oct 12, 2022
+ *      Author: kollaly
+ */
+
+
+#include "gpio.h"
+#include "lcd.h"
+
+int main(void){
+
+	uint16 distance ;
+	LCD_init();
+	LCD_displayString("Distance :  cm");
+	UltraSonic_init();
+
+	while(1){
+
+		distance = Ultrasonic_readDistance();
+		LCD_moveCursor(0,11);
+		if (distance >= 100) {
+			LCD_intgerToString(distance);
+		} else {
+			LCD_intgerToString(distance);
+			/* In case the digital value is two or one digits print space in the next digit place */
+			LCD_displayCharacter(' ');
+		}
+
+	}
+
+
+}

@@ -1,0 +1,29 @@
+/*
+ * UltraSonic_sensor.c
+ *
+ *  Created on: Oct 13, 2022
+ *      Author: kollaly
+ */
+
+#include "UltraSonic_sensor.h"
+#include "icu.h"
+#include "std_types.h"
+
+uint8 g_edgeCount;
+
+/*
+ * Initializaton of the ultrasonic_sensor
+ * */
+
+void UltraSonic_init(void){
+
+	Icu_ConfigType icu_config = {F_CPU_8,RISING};
+	Icu_init(&icu_config);
+	Icu_setCallBack(Ultrasonic_edgeProcessing);
+
+}
+
+
+void Ultrasonic_edgeProcessing(void){
+	g_edgeCount++;
+}

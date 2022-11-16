@@ -1,0 +1,74 @@
+/*
+ * UltraSonic_sensor.c
+ *
+ *  Created on: Oct 13, 2022
+ *      Author: kollaly
+ */
+
+#include "UltraSonic_sensor.h"
+#include "icu.h"
+#include "gpio.h"
+#include <util/delay.h>
+
+
+volatile uint16  g_edgeCount = 0;
+volatile uint16 timer_high_period = 0;
+
+/*
+ * Initialization of the ultrasonic_sensor
+ * */
+
+void UltraSonic_init(void){
+
+	Icu_ConfigType icu_config = {F_CPU_8,RISING};
+	Icu_init(&icu_config);
+	Icu_setCallBack(Ultrasonic_edgeProcessing);
+	GPIO_setupPinDirection(PORTB_ID,PIN5_ID,PIN_OUTPUT);
+
+}
+
+
+void Ultrasonic_edgeProcessing(void){
+	g_edgeCount++;
+	if(g_edgeCount == 1)
+	{
+		/*
+		 * Clear the timer counter register to start measurements from the
+		 * first detected rising edge
+		 */
+		Icu_clearTimerValue();
+		/* Detect falling edge */
+		Icu_setEdgeDetectionType(FALLING);
+	}
+	else if(g_edgeCount == 2)
+	{
+		/* Store the Period time value + High time value */
+		timer_high_period = Icu_getInputCaptureValue();
+		/* Clear the timer counter register to start measurements again */
+		Icu_clearTimerValue();
+		/* Detect rising edge */
+		Icu_setEdgeDetectionType(RISING);
+		g_edgeCount = 0;
+	}
+}
+
+
+void Ultrasonic_Trigger(void){
+
+
+	GPIO_writePin(PORTB_ID,PIN5_ID,LOGIC_HIGH);
+	_delay_us(10);
+	GPIO_writePin(PORTB_ID,PIN5_ID,LOGIC_LOW);
+}
+
+
+uint16 Ultrasonic_readDistance(void){
+
+	uint16 dist = 0;
+	Ultrasonic_Trigger();
+	dist = timer_high_period/58.8 ;
+
+	return dist;
+}
+
+

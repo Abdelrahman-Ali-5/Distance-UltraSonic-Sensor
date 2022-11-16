@@ -1,0 +1,24 @@
+/*
+ * Mini_Project_4_Test.c
+ *
+ *  Created on: Oct 12, 2022
+ *      Author: kollaly
+ */
+
+
+#include "gpio.h"
+
+
+int main(void){
+
+
+
+
+	while(1){
+
+
+
+	}
+
+
+}
